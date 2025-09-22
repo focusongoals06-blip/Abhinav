@@ -7,8 +7,6 @@ if (!process.env.API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Fix: Removed non-standard 'enum' and 'required' properties from the response schema.
-// The model is guided by the prompt and property descriptions instead.
 const responseSchema = {
   type: Type.ARRAY,
   items: {
@@ -38,22 +36,47 @@ const responseSchema = {
         type: Type.STRING,
         description: "A publicly accessible URL for the official poster or cover art of the item."
       },
+      trailer_url: {
+        type: Type.STRING,
+        description: "A publicly accessible URL to the official YouTube trailer for the item, if it is a Movie or TV Show. Leave empty for Books and Games."
+      },
     },
   },
 };
 
 export const getEntertainmentRecommendations = async (mood: string, genres: string, likeThis: string): Promise<Recommendation[]> => {
-  const promptParts: string[] = [];
-  if (mood) promptParts.push(`I'm in the mood for something ${mood}.`);
-  if (genres) promptParts.push(`I enjoy these genres: ${genres}.`);
-  if (likeThis) promptParts.push(`I recently enjoyed "${likeThis}" and want something similar.`);
-  
-  const prompt = `
-    Act as an expert Entertainment Concierge. Please recommend 9 high-quality and diverse entertainment items (a mix of movies, TV shows, books, and video games) based on the following user preferences:
-    ${promptParts.join(' ')}
+  let prompt: string;
+
+  if (mood === 'surprise-me') {
+    prompt = `
+      Act as an expert Entertainment Concierge. The user wants to be surprised. 
+      Please recommend 9 high-quality, diverse, and perhaps unexpected entertainment items (a mix of movies, TV shows, books, and video games). 
+      These could be critically acclaimed classics, hidden gems, or popular modern hits. The goal is to provide a delightful and varied selection for someone who doesn't know what they're looking for.
+      
+      For each recommendation, provide all the requested information in the JSON schema.
+      - It is critically important that you find and include a valid, publicly accessible URL for its official poster or cover art in the 'poster_url' field. Do not use placeholder images.
+      - For items that are 'Movie' or 'TV Show', you MUST find a URL for the official trailer on YouTube and include it in the 'trailer_url' field. For 'Book' and 'Game' items, this field should be omitted or left empty.
+      - The personalization reason should explain why this item is a great "surprise" recommendation (e.g., "A timeless classic that everyone should experience," or "A unique indie game that pushes boundaries.").
+      - The rating should be a realistic reflection of general critic/user consensus.
+    `;
+  } else {
+    const promptParts: string[] = [];
+    if (mood) promptParts.push(`I'm in the mood for something ${mood}.`);
+    if (genres) promptParts.push(`I enjoy these genres: ${genres}.`);
+    if (likeThis) promptParts.push(`I recently enjoyed "${likeThis}" and want something similar.`);
     
-    For each recommendation, provide all the requested information in the JSON schema. It is critically important that you find and include a valid, publicly accessible URL for its official poster or cover art in the 'poster_url' field. Do not use placeholder images. Ensure the personalization reason is compelling and directly relates to the user's input. The rating should be a realistic reflection of general critic/user consensus.
-  `;
+    prompt = `
+      Act as an expert Entertainment Concierge. Please recommend 9 high-quality and diverse entertainment items (a mix of movies, TV shows, books, and video games) based on the following user preferences:
+      ${promptParts.join(' ')}
+      
+      For each recommendation, provide all the requested information in the JSON schema.
+      - It is critically important that you find and include a valid, publicly accessible URL for its official poster or cover art in the 'poster_url' field. Do not use placeholder images.
+      - For items that are 'Movie' or 'TV Show', you MUST find a URL for the official trailer on YouTube and include it in the 'trailer_url' field. For 'Book' and 'Game' items, this field should be omitted or left empty.
+      - Ensure the personalization reason is compelling and directly relates to the user's input.
+      - The rating should be a realistic reflection of general critic/user consensus.
+    `;
+  }
+
 
   try {
     const response = await ai.models.generateContent({

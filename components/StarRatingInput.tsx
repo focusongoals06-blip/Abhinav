@@ -24,26 +24,35 @@ const StarRatingInput: React.FC<StarRatingInputProps> = ({ title }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-sm text-gray-600 font-bold mb-2">Your Rating</p>
+      <p className="text-sm text-gray-600 dark:text-gray-400 font-bold mb-2 dark:glowing-text">Rate the Vibe</p>
       <div className="flex space-x-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
-            aria-label={`Rate ${star} stars`}
+            aria-label={`Rate ${star} out of 5`}
             onClick={() => handleSetRating(star)}
             onMouseEnter={() => setHoverRating(star)}
             onMouseLeave={() => setHoverRating(0)}
-            className="focus:outline-none transform transition-transform hover:scale-125"
+            className="focus:outline-none transform transition-transform hover:scale-125 focus:scale-125"
           >
             <svg
-              className={`w-7 h-7 transition-colors duration-200 ${
-                (hoverRating || rating) >= star ? 'text-yellow-500' : 'text-gray-300'
-              }`}
-              fill="currentColor"
-              viewBox="0 0 20 20"
+              className={`w-8 h-8 transition-all duration-200 ease-in-out`}
+              viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
+              style={{
+                filter: (hoverRating || rating) >= star 
+                  ? `drop-shadow(0 0 5px var(--glow-2)) drop-shadow(0 0 10px var(--glow-3))` 
+                  : 'none'
+              }}
             >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.447a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.539 1.118l-3.367-2.447a1 1 0 00-1.176 0l-3.367 2.447c-.783.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z" />
+              <path 
+                d="M12 2L14.09 8.26L20.5 9.27L15.77 14.14L17.18 20.5L12 17.27L6.82 20.5L8.23 14.14L3.5 9.27L9.91 8.26L12 2Z" 
+                className={
+                  (hoverRating || rating) >= star 
+                  ? 'text-purple-400 fill-current' 
+                  : 'text-gray-300 dark:text-gray-600 fill-current'
+                }
+              />
             </svg>
           </button>
         ))}

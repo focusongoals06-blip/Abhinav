@@ -14,4 +14,5 @@ export interface Recommendation {
   short_description: string;
   personalization_reason: string;
   poster_url?: string;
+  trailer_url?: string;
 }
