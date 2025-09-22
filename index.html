@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeFlow</title>
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://aistudiocdn.com/react@^19.1.1",
+      "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+      "react/": "https://aistudiocdn.com/react@^19.1.1/",
+      "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Righteous&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradient-animation 1s ease infinite;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .font-righteous {
+      font-family: 'Righteous', sans-serif;
+    }
+    
+    .animate-header-gradient {
+      background: linear-gradient(-45deg, #ff7e5f, #feb47b, #86A8E7, #91EAE4);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: header-gradient-animation 1s ease infinite;
+    }
+    
+    .animate-button-colors {
+      background: linear-gradient(-45deg, #4F46E5, #9333EA, #EC4899, #4F46E5);
+      background-size: 400% 400%;
+      animation: button-gradient-animation 0.5s ease infinite;
+    }
+
+    .animate-pulse-glow {
+       animation: pulse-glow 2s infinite;
+    }
+    
+    input::placeholder {
+        font-weight: 600; /* semibold */
+    }
+
+    @keyframes gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes header-gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes button-gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes pulse-glow {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+        }
+        50% {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.6);
+        }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
